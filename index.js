@@ -1,21 +1,21 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+require("dotenv").config();
+const { createServer } = require('./config/db.config');
 const app = express();
-const port = 3000;
 
-// Route handler
+app.use(morgan("dev"));
+app.use(cors("dev"));
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// Connect to MongoDB and start the server
-mongoose
-  .connect(process.env.MONGODB_URI) // Removed the misplaced semicolon here
-  .then(() => {
-    app.listen(process.env.PORT || 8080, () => {
-      console.log("Server listening on port " + (process.env.PORT || 8080));
-    });
-  })
-  .catch((e) => {
-    console.log(e, "error");
-  });
+const router = require("./router/index.router");
+
+app.use("/api", router);
+
+createServer(app);
