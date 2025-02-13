@@ -69,7 +69,7 @@ const getSingleUser = async (req, res) => {
     } else {
       where = userData.id;
     }
-
+console.log(where,"asdasd");
     let result = await UserSchema.findOne({ _id: where }, { password: 0 });
     successResponse(res, "", result);
   } catch (err) {
